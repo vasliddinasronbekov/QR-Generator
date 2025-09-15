@@ -24,3 +24,94 @@ body {
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
 }
+/* Barcha sahifaga umumiy reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: Arial, sans-serif;
+  background: #121212; /* qora fon */
+  color: #eaeaea;      /* oq matn */
+}
+
+/* Layout uchun container */
+.app-container {
+  display: flex;
+  justify-content: center;
+  padding: 20px;
+}
+
+/* Asosiy content */
+.content {
+  max-width: 800px;
+  width: 100%;
+  background: #1e1e1e; /* to‘q kulrang fon */
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.6);
+}
+
+/* --- SIDE ADS --- */
+.side-ad {
+  width: 160px; /* skyscraper banner */
+  min-height: 600px;
+  background: #2a2a2a; /* yon panel uchun fon */
+  border-radius: 10px;
+  margin: 0 15px;
+  position: sticky;
+  top: 20px; /* scroll bo‘lganda tepada qoladi */
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+  color: #bbb; /* matn biroz kulrang */
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.5);
+}
+
+/* Responsive — mobilga tushganda side ads yo‘qoladi */
+@media (max-width: 900px) {
+  .side-ad {
+    display: none;
+  }
+
+  .content {
+    max-width: 100%;
+  }
+}
+
+/* Tugmalar */
+button {
+  cursor: pointer;
+  border: none;
+  border-radius: 8px;
+  background: #0070f3; /* ko‘k tugma */
+  color: #fff;
+  font-size: 16px;
+  padding: 10px 18px;
+  transition: background 0.2s ease;
+}
+
+button:hover {
+  background: #0056c1; /* hover effekti */
+}
+
+/* Input dark mode */
+input {
+  background: #2a2a2a;
+  color: #eaeaea;
+  border: 1px solid #444;
+  border-radius: 6px;
+  padding: 10px;
+  font-size: 16px;
+  width: 100%;
+}
+
+input:focus {
+  outline: none;
+  border-color: #0070f3;
+  box-shadow: 0 0 4px #0070f3;
+}
+

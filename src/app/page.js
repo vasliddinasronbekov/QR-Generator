@@ -1,106 +1,143 @@
+// src/app/page.js
 "use client";
 
-import { useState, useRef, useEffect } from "react";
-import { QRCodeCanvas } from "qrcode.react";
+import { useState, useEffect } from "react";
+import { QRCodeSVG } from "qrcode.react";
 
 export default function Home() {
   const [text, setText] = useState("https://example.com");
-  const canvasRef = useRef(null);
 
-  const downloadQR = () => {
-    window.open("https://otieu.com/4/9880154", "_blank"); // Direct link ad
-    const canvas = document.querySelector("canvas");
-    const url = canvas.toDataURL("image/png");
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "qr.png";
-    a.click();
-  };
-
-  const copyQR = () => {
-    navigator.clipboard.writeText(text).then(() => {
-      alert("Copied!");
-    });
-  };
-
-  // ✅ Chap va o‘ng reklama scriptlarini joylashtirish
+  // Load Interstitial (page-level ad)
   useEffect(() => {
-    // Chap panel uchun
-    const leftScript = document.createElement("script");
-    leftScript.innerHTML = `(function(s){s.dataset.zone='9880253',s.src='https://groleegni.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`;
-    document.getElementById("left-ad").appendChild(leftScript);
-
-    // O‘ng panel uchun
-    const rightScript = document.createElement("script");
-    rightScript.innerHTML = `(function(s){s.dataset.zone='9880245',s.src='https://groleegni.net/vignette.min.js'})([document.documentElement, document.body].filter(Boolean).pop().appendChild(document.createElement('script')))`;
-    document.getElementById("right-ad").appendChild(rightScript);
+    try {
+      const s = document.createElement("script");
+      s.dataset.zone = "9880191"; // interstitial zone
+      s.src = "https://groleegni.net/vignette.min.js";
+      s.async = true;
+      document.body.appendChild(s);
+      return () => {
+        try {
+          document.body.removeChild(s);
+        } catch {}
+      };
+    } catch {}
   }, []);
 
+  // Direct ad link + QR download
+  const downloadQR = () => {
+    try {
+      window.open("https://otieu.com/4/9880154", "_blank");
+    } catch {}
+    const svg = document.querySelector("#qr-code svg");
+    if (svg) {
+      const serializer = new XMLSerializer();
+      const source = serializer.serializeToString(svg);
+      const blob = new Blob([source], { type: "image/svg+xml;charset=utf-8" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = "qr.svg";
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+  };
+
+  // Copy text
+  const copyQR = async () => {
+    try {
+      await navigator.clipboard.writeText(text);
+      document.dispatchEvent(new Event("click"));
+      alert("Copied to clipboard!");
+    } catch {
+      alert("Copy failed");
+    }
+  };
+
   return (
-    <div
-      style={{
-        display: "flex",
-        justifyContent: "center",
-        margin: "20px auto",
-        maxWidth: 1200,
-      }}
-    >
-      {/* --- LEFT AD --- */}
-      <aside
-        style={{
-          width: 160,
-          marginRight: 20,
-          position: "sticky",
-          top: 20,
-          height: "100%",
-        }}
-      >
-        <div id="left-ad"></div>
-      </aside>
+    <main style={styles.container}>
+      <h1 style={styles.title}>QR Generator</h1>
 
-      {/* --- MAIN CONTENT --- */}
-      <main style={{ flex: 1, maxWidth: 800, textAlign: "center" }}>
-        <h1>Fast QR Generator</h1>
-        <input
-          value={text}
-          onChange={(e) => setText(e.target.value)}
-          style={{ width: "80%", padding: "10px", fontSize: 16 }}
-        />
-        <div
-          style={{
-            marginTop: 20,
-            background: "#fff",
-            display: "inline-block",
-            padding: 20,
-          }}
-        >
-          <QRCodeCanvas value={text} size={256} level="H" includeMargin={true} />
-        </div>
-        <div style={{ marginTop: 20 }}>
-          <button onClick={downloadQR} style={{ padding: "10px 20px" }}>
-            Download PNG
-          </button>
-          <button
-            onClick={copyQR}
-            style={{ padding: "10px 20px", marginLeft: 10 }}
-          >
-            Copy
-          </button>
-        </div>
-      </main>
+      <input
+        value={text}
+        onChange={(e) => setText(e.target.value)}
+        placeholder="Type or paste a link..."
+        style={styles.input}
+        aria-label="QR text"
+      />
 
-      {/* --- RIGHT AD --- */}
-      <aside
-        style={{
-          width: 160,
-          marginLeft: 20,
-          position: "sticky",
-          top: 20,
-          height: "100%",
-        }}
-      >
-        <div id="right-ad"></div>
-      </aside>
-    </div>
+      <div id="qr-code" style={styles.qrBox}>
+        <QRCodeSVG value={text} size={256} level="H" includeMargin={true} style={{ imageRendering: "crisp-edges" }}/>
+      </div>
+
+      <div style={styles.actions}>
+        <button onClick={downloadQR} style={styles.button}>
+          ⬇ Download
+        </button>
+        <button onClick={copyQR} style={{ ...styles.button, background: "#444" }}>
+          📋 Copy
+        </button>
+      </div>
+
+      <p style={styles.note}>
+        Simple, fast & free — share your QR with friends!
+      </p>
+    </main>
   );
 }
+
+const styles = {
+  container: {
+    minHeight: "100vh",
+    background: "#0d1117",
+    color: "#e6edf3",
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "flex-start",
+    padding: "40px 20px",
+    fontFamily: "system-ui, sans-serif",
+  },
+  title: {
+    fontSize: "2rem",
+    marginBottom: 20,
+    fontWeight: "600",
+  },
+  input: {
+    width: "100%",
+    maxWidth: 480,
+    padding: "12px 14px",
+    fontSize: "1rem",
+    borderRadius: 8,
+    border: "1px solid #30363d",
+    background: "#161b22",
+    color: "#e6edf3",
+    marginBottom: 28,
+  },
+  qrBox: {
+    background: "#161b22",
+    padding: 20,
+    borderRadius: 12,
+    boxShadow: "0 6px 20px rgba(0,0,0,0.3)",
+    marginBottom: 24,
+  },
+  actions: {
+    display: "flex",
+    gap: "12px",
+    marginBottom: 20,
+  },
+  button: {
+    padding: "10px 20px",
+    borderRadius: 8,
+    border: "none",
+    background: "#238636",
+    color: "#fff",
+    fontSize: "0.95rem",
+    cursor: "pointer",
+    transition: "background 0.2s",
+  },
+  note: {
+    fontSize: "0.9rem",
+    color: "#8b949e",
+    marginTop: 10,
+  },
+};
