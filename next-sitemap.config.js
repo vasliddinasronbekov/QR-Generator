@@ -1,4 +1,5 @@
 /** @type {import('next-sitemap').IConfig} */
+const { posts } = require("./src/data/posts");
 module.exports = {
   siteUrl: "https://qr.awds.uz", // 🔴 bu yerda domeningni yoz
   generateRobotsTxt: true,           // robots.txt yaratadi

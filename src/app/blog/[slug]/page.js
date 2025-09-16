@@ -1,5 +1,11 @@
 import { posts } from "@/data/posts";
+import { posts } from "@/data/posts";
 
+export async function generateStaticParams() {
+  return posts.map((post) => ({
+    slug: post.slug,
+  }));
+}
 export async function generateMetadata({ params }) {
   const post = posts.find((p) => p.slug === params.slug);
   if (!post) return { title: "Post not found" };
