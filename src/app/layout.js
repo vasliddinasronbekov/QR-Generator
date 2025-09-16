@@ -4,9 +4,35 @@ import Script from "next/script";
 import { Analytics } from "@vercel/analytics/next";
 
 export const metadata = {
-  title: "Generate QR Codes Online – Quick, Free & No Sign Up",
-  description:
-    "Free online QR code generator – create custom QR codes for links, text, phone numbers, and more. Fast, secure, no sign-up required. Download instantly.",
+  title: "Free QR Code Generator – Create & Download in Seconds",
+  description: "Free online QR code generator — create QR for links, Wi-Fi, vCard. Download SVG, PNG, JPG, ICO. No signup.",
+  alternates: { canonical: 'https://qr.mysite.uz/' },
+  openGraph: {
+    title: "Free QR Code Generator – Create & Download in Seconds",
+    description: "Create QR codes online (SVG/PNG/JPG/ICO). Fast, secure, no signup.",
+    url: "https://qr.mysite.uz",
+    siteName: "qr.mysite.uz",
+    images: [
+      {
+        url: "https://qr.mysite.uz/og-image.png",
+        width: 1200,
+        height: 630,
+        alt: "QR Generator"
+      }
+    ],
+    locale: "en_US",
+    type: "website",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Free QR Code Generator",
+    description: "Create & download QR as SVG, PNG, JPG, ICO.",
+    images: ["https://qr.mysite.uz/og-image.png"]
+  },
+  robots: {
+    index: true,
+    follow: true,
+  }
 };
 
 export default function RootLayout({ children }) {

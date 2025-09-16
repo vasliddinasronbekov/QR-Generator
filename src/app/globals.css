@@ -1,5 +1,7 @@
 @import "tailwindcss";
-
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
 :root {
   --background: #ffffff;
   --foreground: #171717;
@@ -115,3 +117,14 @@ input:focus {
   box-shadow: 0 0 4px #0070f3;
 }
 
+
+.prose {
+  color: #ddd;
+}
+.prose h1, .prose h2, .prose h3 {
+  color: #fff;
+}
+.prose a {
+  color: #0b63ff;
+  text-decoration: underline;
+}
