@@ -22,7 +22,11 @@ export default function Home() {
       };
     } catch {}
   }, []);
-
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const t = params.get("text");
+    if (t) setText(t);
+  }, []);
   // Direct ad link + QR download
   const downloadQR = () => {
     try {
